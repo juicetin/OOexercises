@@ -41,6 +41,7 @@ Week9::EuclideanVector::EuclideanVector(const std::vector<double> &vector)
 Week9::EuclideanVector::EuclideanVector(const EuclideanVector &vector)
 {
 	m_vector = new double[vector.size()];
+	m_size = vector.size();
 	for (int i = 0; i < (int)vector.size(); ++i)
 	{
 		m_vector[i] = vector[i];
@@ -106,7 +107,7 @@ bool Week9::EuclideanVector::operator==(const EuclideanVector &vector) const
 
 	for (int i = 0; i < m_size; ++i)
 	{
-		if (m_vector[i] != vector[i])
+		if (fabs(m_vector[i] -  vector[i]) > 0.01)
 		{
 			return false;
 		}
@@ -130,7 +131,7 @@ bool Week9::EuclideanVector::operator!=(const EuclideanVector &vector) const
 
 	for (int i = 0; i < (int)vector.size(); ++i)
 	{
-		if (m_vector[i] != vector[i])
+		if (fabs(m_vector[i] - vector[i]) > 0.01)
 		{
 			return true;
 		}
@@ -213,12 +214,18 @@ Week9::EuclideanVector Week9::EuclideanVector::operator+(const EuclideanVector &
 			throw Week9::VectorArithmeticException("Vectors are not the same size");
 		}
 
-		UP TO HERE (DELIBERATE ERROR)	
 	}
 	catch (std::exception &e)
 	{
 		std::cout << e.what() << std::endl;
 	}
+
+	Week9::EuclideanVector tmp(*this);
+	for (int i = 0; i < m_size; ++i)
+	{
+		tmp[i] += vector[i];
+	}
+	return tmp;
 }
 
 /**
@@ -230,7 +237,25 @@ Week9::EuclideanVector Week9::EuclideanVector::operator+(const EuclideanVector &
  */
 Week9::EuclideanVector Week9::EuclideanVector::operator-(const EuclideanVector &vector) const
 {
+	try
+	{
+		if (m_size != (int)vector.size())
+		{
+			throw Week9::VectorArithmeticException("Vectors are not the same size");
+		}
 
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
+	Week9::EuclideanVector tmp(*this);
+	for (int i = 0; i < m_size; ++i)
+	{
+		tmp[i] -= vector[i];
+	}
+	return tmp;
 }
 
 /**
@@ -240,8 +265,26 @@ Week9::EuclideanVector Week9::EuclideanVector::operator-(const EuclideanVector &
  * with the message "Vectors are not the same size"
  * @return a reference to the current vector
  */
-Week9::EuclideanVector& Week9::EuclideanVector::operator+=(const EuclideanVector &vector) {
+Week9::EuclideanVector& Week9::EuclideanVector::operator+=(const EuclideanVector &vector) 
+{
+	try
+	{
+		if (m_size != (int)vector.size())
+		{
+			throw Week9::VectorArithmeticException("Vectors are not the same size");
+		}
 
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
+	for (int i = 0; i < m_size; ++i)
+	{
+		m_vector[i] += vector[i];
+	}
+	return *this;
 }
 
 /**
@@ -254,6 +297,24 @@ Week9::EuclideanVector& Week9::EuclideanVector::operator+=(const EuclideanVector
 Week9::EuclideanVector& Week9::EuclideanVector::operator-=(const EuclideanVector &vector)
 {
 
+	try
+	{
+		if (m_size != (int)vector.size())
+		{
+			throw Week9::VectorArithmeticException("Vectors are not the same size");
+		}
+
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
+	for (int i = 0; i < m_size; ++i)
+	{
+		m_vector[i] -= vector[i];
+	}
+	return *this;
 }
 
 /**
@@ -263,7 +324,11 @@ Week9::EuclideanVector& Week9::EuclideanVector::operator-=(const EuclideanVector
  */
 Week9::EuclideanVector& Week9::EuclideanVector::operator*=(double scalingValue)
 {
-
+	for (int i = 0; i < m_size; ++i)
+	{
+		m_vector[i] *= scalingValue;
+	}
+	return *this;
 }
 
 /**
@@ -273,7 +338,12 @@ Week9::EuclideanVector& Week9::EuclideanVector::operator*=(double scalingValue)
  */
 Week9::EuclideanVector& Week9::EuclideanVector::operator/=(double scalingValue)
 {
+	for (int i = 0; i < m_size; ++i)
+	{
+		m_vector[i] /= scalingValue;	
+	}
 
+	return *this;
 }
 
 /**
@@ -286,7 +356,22 @@ Week9::EuclideanVector& Week9::EuclideanVector::operator/=(double scalingValue)
  */
 double& Week9::EuclideanVector::operator[](unsigned int index)
 {
-	return m_vector[index];
+	try
+	{
+		if (index > m_size - 1 || index < 0)
+		{
+			throw Week9::VectorIndexOutOfBoundsException("Index is greater than or equal to the allocated size");
+		}
+		else
+		{
+			return m_vector[index];
+		}
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
 }
 
 /**
@@ -299,5 +384,20 @@ double& Week9::EuclideanVector::operator[](unsigned int index)
  */
 const double& Week9::EuclideanVector::operator[](unsigned int index) const
 {
-	return m_vector[index];
+	try
+	{
+		if (index > m_size - 1 || index < 0)
+		{
+			throw Week9::VectorIndexOutOfBoundsException("Index is greater than or equal to the allocated size");
+		}
+		else
+		{
+			return m_vector[index];
+		}
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
 }
