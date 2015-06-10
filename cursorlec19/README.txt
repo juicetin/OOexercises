@@ -1,0 +1,1 @@
+To run this problem move the eraser.gif into the execution directory.

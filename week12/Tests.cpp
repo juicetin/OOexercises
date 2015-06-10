@@ -303,6 +303,7 @@ bool Tests::complexCopyConstructorTest() const
         SharedPointer<std::string> pointer2(pointer1);
         if ("Hello World" != *pointer2)
         {
+            std::cout << "failed1" << std::endl;
             success = false;
         }
         if (pointer1.unique())
@@ -372,6 +373,7 @@ bool Tests::assignmentOperatorTest2() const
     }
     if (!pointer2.unique())
     {
+        std::cout << "failed1" << std::endl;
         success = false;
     }
     return success;
